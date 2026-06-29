@@ -40,8 +40,7 @@ def path_generator(network: Network, o_idx, search_radius=800, detour_ratio=1.15
     for d_idx in d_idxs.keys():
         d_allowed_distances[d_idx] =  d_idxs[d_idx] * detour_ratio
 
-    #paths, distances = bfs_paths_many_targets_iterative(
-    path_edges, distances = bfs_path_edges_many_targets_iterative(
+    paths, distances = bfs_paths_many_targets_iterative(
         network=network,
         o_graph=o_graph,
         o_idx=o_idx,
@@ -53,8 +52,7 @@ def path_generator(network: Network, o_idx, search_radius=800, detour_ratio=1.15
     
     #network.update_light_graph(o_graph, remove_nodes=[o_idx])
     network.remove_node_to_graph(o_graph, o_idx)
-    #return paths, distances, d_idxs
-    return path_edges, distances, d_idxs
+    return paths, distances, d_idxs
 
 
 
