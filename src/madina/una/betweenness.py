@@ -290,7 +290,24 @@ def one_betweenness_2(
                 shortest_path_distance = min(weights[destination_idx])
                 for path, this_path_weight in zip(paths[destination_idx], weights[destination_idx]):
                     inner_path_edges = list(nx.utils.pairwise(path[1:-1]))
-                    inner_edge_ids = [network.light_graph.edges[edge]["id"] for edge in inner_path_edges]
+                    inner_edge_ids = []
+                    for edge in inner_path_edges:
+                        if edge in o_graph.edges:
+                            inner_edge_ids.append(o_graph.edges[edge]["id"])
+                        elif (edge[1], edge[0]) in o_graph.edges:
+                            inner_edge_ids.append(o_graph.edges[(edge[1], edge[0])]["id"])
+                        elif edge in network.light_graph.edges:
+                            inner_edge_ids.append(network.light_graph.edges[edge]["id"])
+                        elif (edge[1], edge[0]) in network.light_graph.edges:
+                            inner_edge_ids.append(network.light_graph.edges[(edge[1], edge[0])]["id"])
+                        else:
+                            try:
+                                inner_edge_ids.append(network.d_graph.edges[edge]["id"])
+                            except Exception:
+                                try:
+                                    inner_edge_ids.append(network.d_graph.edges[(edge[1], edge[0])]["id"])
+                                except Exception:
+                                    pass
                     edge_ids = [node_gdf.at[path[0], 'nearest_edge_id']] + inner_edge_ids + [
                         node_gdf.at[path[-1], 'nearest_edge_id']]
                     # this_path_weight = path_weight(graph, path, weight="weight")
