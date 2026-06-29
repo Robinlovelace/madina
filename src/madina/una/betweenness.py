@@ -388,9 +388,9 @@ def one_betweenness_2(
                     for edge_id in this_od_paths["path_edges"][seq]:
                         batch_betweenness_tracker[int(edge_id)] += betweennes_contribution
             except Exception as e:
-                print(f"................o: {origin_idx}\td: {destination_idx} faced an error........")
-                print(path)
-                print(e.__doc__)
+                print(f"................o: {origin_idx}\td: {destination_idx} faced an error: {e}........")
+                import traceback
+                traceback.print_exc()
                 pass
 
 
