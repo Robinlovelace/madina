@@ -292,20 +292,22 @@ def one_betweenness_2(
                     inner_path_edges = list(nx.utils.pairwise(path[1:-1]))
                     inner_edge_ids = []
                     for edge in inner_path_edges:
-                        if edge in o_graph.edges:
-                            inner_edge_ids.append(o_graph.edges[edge]["id"])
-                        elif (edge[1], edge[0]) in o_graph.edges:
-                            inner_edge_ids.append(o_graph.edges[(edge[1], edge[0])]["id"])
-                        elif edge in network.light_graph.edges:
-                            inner_edge_ids.append(network.light_graph.edges[edge]["id"])
-                        elif (edge[1], edge[0]) in network.light_graph.edges:
-                            inner_edge_ids.append(network.light_graph.edges[(edge[1], edge[0])]["id"])
+                        int_edge = (int(edge[0]), int(edge[1]))
+                        rev_int_edge = (int(edge[1]), int(edge[0]))
+                        if int_edge in o_graph.edges:
+                            inner_edge_ids.append(o_graph.edges[int_edge]["id"])
+                        elif rev_int_edge in o_graph.edges:
+                            inner_edge_ids.append(o_graph.edges[rev_int_edge]["id"])
+                        elif int_edge in network.light_graph.edges:
+                            inner_edge_ids.append(network.light_graph.edges[int_edge]["id"])
+                        elif rev_int_edge in network.light_graph.edges:
+                            inner_edge_ids.append(network.light_graph.edges[rev_int_edge]["id"])
                         else:
                             try:
-                                inner_edge_ids.append(network.d_graph.edges[edge]["id"])
+                                inner_edge_ids.append(network.d_graph.edges[int_edge]["id"])
                             except Exception:
                                 try:
-                                    inner_edge_ids.append(network.d_graph.edges[(edge[1], edge[0])]["id"])
+                                    inner_edge_ids.append(network.d_graph.edges[rev_int_edge]["id"])
                                 except Exception:
                                     pass
                     edge_ids = [node_gdf.at[path[0], 'nearest_edge_id']] + inner_edge_ids + [
