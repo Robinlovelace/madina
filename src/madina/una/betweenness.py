@@ -294,10 +294,10 @@ def one_betweenness_2(
                     for edge in inner_path_edges:
                         int_edge = (int(edge[0]), int(edge[1]))
                         rev_int_edge = (int(edge[1]), int(edge[0]))
-                        if int_edge in o_graph.edges:
-                            inner_edge_ids.append(o_graph.edges[int_edge]["id"])
-                        elif rev_int_edge in o_graph.edges:
-                            inner_edge_ids.append(o_graph.edges[rev_int_edge]["id"])
+                        if int_edge in network.d_graph.edges:
+                            inner_edge_ids.append(network.d_graph.edges[int_edge]["id"])
+                        elif rev_int_edge in network.d_graph.edges:
+                            inner_edge_ids.append(network.d_graph.edges[rev_int_edge]["id"])
                         elif int_edge in network.light_graph.edges:
                             inner_edge_ids.append(network.light_graph.edges[int_edge]["id"])
                         elif rev_int_edge in network.light_graph.edges:
@@ -310,8 +310,18 @@ def one_betweenness_2(
                                     inner_edge_ids.append(network.d_graph.edges[rev_int_edge]["id"])
                                 except Exception:
                                     pass
-                    edge_ids = [node_gdf.at[path[0], 'nearest_edge_id']] + inner_edge_ids + [
-                        node_gdf.at[path[-1], 'nearest_edge_id']]
+                    
+                    try:
+                        o_edge_id = node_gdf.at[path[0], 'nearest_edge_id']
+                    except KeyError:
+                        o_edge_id = node_gdf.at[np.int64(path[0]), 'nearest_edge_id']
+                        
+                    try:
+                        d_edge_id = node_gdf.at[path[-1], 'nearest_edge_id']
+                    except KeyError:
+                        d_edge_id = node_gdf.at[np.int64(path[-1]), 'nearest_edge_id']
+
+                    edge_ids = [o_edge_id] + inner_edge_ids + [d_edge_id]
                     # this_path_weight = path_weight(graph, path, weight="weight")
 
                     if this_path_weight > shortest_path_distance * detour_ratio:
