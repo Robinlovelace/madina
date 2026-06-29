@@ -244,6 +244,9 @@ def bfs_paths_many_targets_iterative(
             for target in targets_remaining:
                 int_target = int(target)
                 if int_neighbor in distance_matrix[int_target]:
+                    val = distance_matrix[int_target][int_neighbor] + neighbor_current_weight - d_idxs[int_target]
+                    if int_neighbor == int_target:
+                        print(f"DEBUG: target={int_target}, neighbor={int_neighbor}, dist={distance_matrix[int_target][int_neighbor]}, weight={neighbor_current_weight}, d_idx={d_idxs[int_target]}, diff={val}")
                     # equality with small tolerance to allow numerical error in case there was no detour ratio
                     if distance_matrix[int_target][int_neighbor] + neighbor_current_weight - d_idxs[int_target] <=  0.00001:
                         neighbor_targets_remaining.append(int_target)
