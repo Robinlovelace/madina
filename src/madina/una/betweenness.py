@@ -196,7 +196,7 @@ def one_betweenness_2(
 
     # graph = self.G.copy()
 
-    batch_betweenness_tracker = {edge_id: 0 for edge_id in list(edge_gdf.index)}
+    batch_betweenness_tracker = {int(edge_id): 0 for edge_id in list(edge_gdf.index)}
 
     counter = 0
     retain_paths = {}
@@ -386,7 +386,7 @@ def one_betweenness_2(
                         betweennes_contribution *= trip_probability
 
                     for edge_id in this_od_paths["path_edges"][seq]:
-                        batch_betweenness_tracker[edge_id] += betweennes_contribution
+                        batch_betweenness_tracker[int(edge_id)] += betweennes_contribution
             except Exception as e:
                 print(f"................o: {origin_idx}\td: {destination_idx} faced an error........")
                 print(path)
@@ -458,7 +458,7 @@ def betweenness_exposure(
 
 
     # TODO: convert this to a numby array to simplify calculations.
-    batch_betweenness_tracker = {edge_id: 0.0 for edge_id in list(edge_gdf.index)}
+    batch_betweenness_tracker = {int(edge_id): 0.0 for edge_id in list(edge_gdf.index)}
     
 
     if return_path_record:
@@ -796,7 +796,7 @@ def betweenness_exposure(
                         for this_path_edges, betweennes_contribution in zip (path_edges[destination_idx], betweennes_contributions): 
                             for edge_id in this_path_edges:
                             #for edge_id in set(this_path_edges).union(od_edges):
-                                batch_betweenness_tracker[edge_id] += betweennes_contribution
+                                batch_betweenness_tracker[int(edge_id)] += betweennes_contribution
 
                     else:  # for exposure
                         for this_path_edges, betweennes_contribution, destination_path_probability, path_decay, this_path_weight in zip (path_edges[destination_idx], betweennes_contributions, destination_path_probabilies, path_decays, d_path_weights): 
@@ -805,7 +805,7 @@ def betweenness_exposure(
 
 
                             for edge_id in this_path_edges:
-                                batch_betweenness_tracker[edge_id] += betweennes_contribution
+                                batch_betweenness_tracker[int(edge_id)] += betweennes_contribution
                                 segment_weight = edge_gdf.at[int(edge_id), 'weight']
                                 path_weight_sum += segment_weight
                                 path_weight_exposure += segment_weight * self[self.network.edge_source_layer].gdf.at[edge_gdf.at[edge_id, 'parent_street_id'], path_exposure_attribute]
