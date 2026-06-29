@@ -314,7 +314,14 @@ def one_betweenness_2(
                     try:
                         o_edge_id = node_gdf.at[path[0], 'nearest_edge_id']
                     except KeyError:
-                        o_edge_id = node_gdf.at[np.int64(path[0]), 'nearest_edge_id']
+                        try:
+                            o_edge_id = node_gdf.at[np.int64(path[0]), 'nearest_edge_id']
+                        except KeyError:
+                            try:
+                                o_edge_id = node_gdf.at[int(path[0]), 'nearest_edge_id']
+                            except KeyError:
+                                print(f"DEBUG_KEYERROR: path[0]={path[0]} (type: {type(path[0])}) not in node_gdf.index! index dtype: {node_gdf.index.dtype}, min: {node_gdf.index.min()}, max: {node_gdf.index.max()}, count: {len(node_gdf)}")
+                                raise
                         
                     try:
                         d_edge_id = node_gdf.at[path[-1], 'nearest_edge_id']
