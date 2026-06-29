@@ -106,7 +106,8 @@ def parallel_betweenness(
         # origins = origins.sample(frac=1)
         # TODO: this is a temporary check, need to see why indices are becoming floats
         origins.index = origins.index.astype("int")
-        splitted_origins = np.array_split(origins, num_procs)
+        split_indices = np.array_split(range(len(origins)), num_procs)
+        splitted_origins = [origins.iloc[idx] for idx in split_indices]
         # print("done with filtering, randomizing and splitting: " + str(time.time() - timer))
         start = time.time()
         with concurrent.futures.ProcessPoolExecutor(max_workers=num_procs) as executor:
