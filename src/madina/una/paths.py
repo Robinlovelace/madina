@@ -227,11 +227,6 @@ def bfs_paths_many_targets_iterative(
         for neighbor in scope_neighbors:
             if neighbor in visited:
                 continue
-            # the given graph have 2 neighbors for origins and destinations. if a node has only one
-            # neighbor, its a deadend.
-            if len(list(o_graph.neighbors(neighbor))) == 1:
-                continue
-
             turn_cost = 0
             if turn_penalty and len(visited) >= 2:
                 turn_cost = turn_penalty_value(network, visited[-2], source, neighbor)
@@ -249,7 +244,7 @@ def bfs_paths_many_targets_iterative(
 
 
             if neighbor in neighbor_targets_remaining:
-                paths[neighbor].append([x for x in visited if x in allowed_path_nodes] + [neighbor])  
+                paths[neighbor].append(visited + [neighbor])  
                 # paths[neighbor].append([x for x in visited if x not in d_idxs] + [neighbor])
                 distances[neighbor].append(neighbor_current_weight)
                 neighbor_targets_remaining.remove(neighbor)
